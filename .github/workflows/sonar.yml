@@ -38,8 +38,8 @@ jobs:
       - name: Run tests
         run: npx npm test -- --coverage
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2.3.1
+      - name: SonarCloud Analysis
+        uses: SonarSource/sonarcloud-github-action@v6
         with:
             organization: voltcast-a-ase-project
             projectKey: shelly
