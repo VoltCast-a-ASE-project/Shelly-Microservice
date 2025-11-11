@@ -43,7 +43,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           npx sonar-scanner \
-            -Dsonar.projectKey=VoltCast-a-ASE-project_Shelly-Microservice \
+            -Dsonar.projectKey=shelly \
             -Dsonar.organization=voltcast-a-ase-project \
             -Dsonar.sources=. \
             -Dsonar.tests=. \
