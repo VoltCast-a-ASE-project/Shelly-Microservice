@@ -40,9 +40,5 @@ jobs:
 
       - name: SonarCloud Analysis
         uses: SonarSource/sonarqube-scan-action@v6
-        with:
-            organization: voltcast-a-ase-project
-            projectKey: shelly
-            projectBaseDir: .
         env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
