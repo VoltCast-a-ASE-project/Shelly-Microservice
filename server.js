@@ -2,19 +2,30 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+// make server express
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+// port of the server
+const port = 8083;
 
-// Basic route
-app.get('/', (req, res) => {
-  res.send('Welcome to my microservice!');
+
+app.use(express.json());
+
+// checks for specific methods, headers and a certain origin
+app.use(cors({
+  origin: 'http://localhost:8080',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  //allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  //credentials: true
+}));
+
+
+app.get('/hello', (req, res) => {
+  res.status(200).json({ message: 'Hello from Shelly Microservice!' });
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+
+
+app.listen(port, async () => {
+    console.log(`Listening on port ${port}`);
 });
