@@ -13,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: Shelly-Microservice
+        working-directory: .
 
     steps:
       - name: Checkout Repository
@@ -36,7 +36,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test -- --coverage
+        run: npx npm test -- --coverage
 
       - name: Run SonarQube scan
         env:
