@@ -39,7 +39,7 @@ jobs:
         run: npx npm test -- --coverage
 
       - name: SonarCloud Analysis
-        uses: SonarSource/sonarcloud-github-action@v6
+        uses: SonarSource/sonarqube-scan-action@v6
         with:
             organization: voltcast-a-ase-project
             projectKey: shelly
