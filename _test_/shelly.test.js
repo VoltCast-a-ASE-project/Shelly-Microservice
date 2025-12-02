@@ -1,6 +1,5 @@
 const ShellyDevice = require('../VMC/models/Shelly');
 const db = require('../database/database');
-const {updateShellyDevice} = require("../VMC/controllers/shelly");
 
 jest.mock('../database/database', () => ({
     query: jest.fn(),

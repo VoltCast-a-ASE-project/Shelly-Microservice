@@ -20,7 +20,7 @@ exports.getShellyDevice = async(req,res)=>{
     }
 }
 
-exports.addShellyDevice = async (req, res, next) => {
+exports.addShellyDevice = async (req, res) => {
     try {
         const {
             ip,
@@ -49,7 +49,7 @@ exports.addShellyDevice = async (req, res, next) => {
     }
 };
 
-exports.updateShellyDevice = async (req, res, next) => {
+exports.updateShellyDevice = async (req, res) => {
     try {
         const {
             id,
@@ -84,7 +84,7 @@ exports.updateShellyDevice = async (req, res, next) => {
 };
 
 
-exports.deleteShellyDevice = async (req, res, next) => {
+exports.deleteShellyDevice = async (req, res) => {
     try {
         const id = req.params.id;
 
