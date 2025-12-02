@@ -1,4 +1,4 @@
-const ShellyDevice = require('../VMC/models/Shelly');
+const ShellyDevice = require('../VMC/models/shelly');
 const db = require('../database/database');
 
 jest.mock('../database/database', () => ({
