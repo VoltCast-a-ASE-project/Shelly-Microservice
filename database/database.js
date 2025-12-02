@@ -42,10 +42,9 @@ async function init() {
 const dbPromise = init();
 
 
-module.exports = {
+const dbWrapper = {
     query: async (sql, params = []) => {
         const db = await dbPromise;
-
         const isSelect = sql.trim().toLowerCase().startsWith("select");
 
         if (isSelect) {
@@ -59,17 +58,19 @@ module.exports = {
                 changes: result.changes
             };
         }
-    },
-
-    testDatabase:async ()=>{
-        try {
-            const db = await dbPromise;
-            await db.query("SELECT 1");
-            return true;
-        } catch {
-            return false;
-        }
     }
 };
+
+dbWrapper.testDatabase = async () => {
+    try {
+        const result = await dbWrapper.query("SELECT 1");
+        return true;
+    } catch (err) {
+        console.error("DB test failed:", err);
+        return false;
+    }
+};
+
+module.exports = dbWrapper;
 
 
