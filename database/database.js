@@ -63,7 +63,7 @@ const dbWrapper = {
 
 dbWrapper.testDatabase = async () => {
     try {
-        const result = await dbWrapper.query("SELECT 1");
+        await dbWrapper.query("SELECT 1");
         return true;
     } catch (err) {
         console.error("DB test failed:", err);
