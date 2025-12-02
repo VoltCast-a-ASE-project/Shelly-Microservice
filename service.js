@@ -8,7 +8,6 @@ const app = express();
 // port of the server
 const port = 8083;
 
-
 app.use(express.json());
 
 // checks for specific methods, headers and a certain origin
@@ -24,8 +23,14 @@ app.get('/hello', (req, res) => {
   res.status(200).json({ message: 'Hello from Shelly Microservice!' });
 });
 
-
-
 app.listen(port, async () => {
-    console.log(`Listening on port ${port}`);
+    try {
+        //simple call to check database connection
+        const res = await db.query('SELECT NOW()');
+        console.log('Database connection successful.:', res.rows[0]);
+
+        console.log(`Listening on port ${port}`);
+    } catch (err) {
+        console.error('Cannot connect to database.:', err.stack);
+    }
 });
