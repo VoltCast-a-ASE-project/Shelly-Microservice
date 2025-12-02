@@ -6,16 +6,23 @@ const router = express.Router();
 
 const ShellyController = require('../controllers/shelly');
 
-const validateShelly = [
-    body('id').isNumeric().optional(),
+const validateShellyUpdate = [
+    body('id').isNumeric().withMessage('id cannot be empty.'),
     body('ip').isString().isLength({ min: 1 }).withMessage('IP-address cannot be empty.'),
     body('user').isString().isLength({ min: 1 }).withMessage('user cannot be empty.'),
-    body('internal_id').isNumeric().withMessage('needs internal_id.'),
+    body('internal_id').isNumeric().withMessage('internal_id cannot be empty.'),
     body('name').isString().isLength({ min: 1 }).withMessage('Name cannot be empty.'),
     body('isActivated').isBoolean().withMessage('isActivated must be a boolean.'),
 ];
 
-router.post('/add', validateShelly, (req, res, next) => {
+const validateShellyAdd = [
+    body('ip').isString().isLength({ min: 1 }).withMessage('IP-address cannot be empty.'),
+    body('user').isString().isLength({ min: 1 }).withMessage('user cannot be empty.'),
+    body('internal_id').isNumeric().withMessage('needs internal_id.'),
+    body('name').isString().isLength({ min: 1 }).withMessage('Name cannot be empty.'),
+];
+
+router.post('/add', validateShellyAdd, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -23,7 +30,7 @@ router.post('/add', validateShelly, (req, res, next) => {
     next();
 }, ShellyController.addShellyDevice);
 
-router.put('/update', validateShelly, (req, res, next) => {
+router.put('/update', validateShellyUpdate, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
