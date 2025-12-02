@@ -16,7 +16,7 @@ exports.getShellyDevice = async(req,res)=>{
         res.status(200).json(shellyDevice);
     }catch (err) {
         console.log("Error getShellyDevice:",err);
-        res.status(500).json({ message: `Cannot get ShellyDevice with ID ${shellyID}.` });
+        res.status(500).json({ message: `Cannot get ShellyDevice with ID ${id}.` });
     }
 }
 
