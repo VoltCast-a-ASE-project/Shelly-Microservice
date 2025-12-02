@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const db = require('./database/database');
+const shellyRoutes = require('./VMC/routes/shelly');
 
 // make server express
 const app = express();
@@ -23,11 +25,12 @@ app.get('/hello', (req, res) => {
   res.status(200).json({ message: 'Hello from Shelly Microservice!' });
 });
 
+app.use('/shelly', shellyRoutes);
+
 app.listen(port, async () => {
     try {
-        //simple call to check database connection
-        const res = await db.query('SELECT NOW()');
-        console.log('Database connection successful.:', res.rows[0]);
+       await db.testDatabase();
+        console.log('Database connection successful.:');
 
         console.log(`Listening on port ${port}`);
     } catch (err) {
