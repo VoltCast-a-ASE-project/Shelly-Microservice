@@ -2,8 +2,10 @@ const ShellyDevice = require('../VMC/models/shelly');
 const db = require('../database/database');
 
 jest.mock('../database/database', () => ({
+    testDatabase: jest.fn().mockResolvedValue(true),
     query: jest.fn(),
 }));
+
 
 describe('ShellyDevice', () => {
 

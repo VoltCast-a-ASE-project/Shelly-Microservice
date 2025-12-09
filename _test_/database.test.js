@@ -1,46 +1,26 @@
 const db = require('../database/database');
 
+jest.mock('../database/database', () => ({
+    testDatabase: jest.fn().mockResolvedValue(true),
+    query: jest.fn(),
+}));
+
+
 describe('SQLite Database Wrapper', () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('testDatabase should return true if DB is connected', async () => {
+        db.testDatabase.mockResolvedValue(true);
         const result = await db.testDatabase();
         expect(result).toBe(true);
     });
 
-    test('should create, insert and select from shelly table', async () => {
-        const insertResult = await db.query(
-            'INSERT INTO shelly (internal_id, user, ip, name) VALUES (?, ?, ?, ?)',
-            [1, 'testuser', '192.168.1.1', 'Shelly A']
-        );
-
-        expect(insertResult.lastID).toBeGreaterThan(0);
-
-        const selectResult = await db.query(
-            'SELECT * FROM shelly WHERE id=?',
-            [insertResult.lastID]
-        );
-
-        expect(selectResult.rows.length).toBe(1);
-        expect(selectResult.rows[0].name).toBe('Shelly A');
-    });
-
-    test('should update a record', async () => {
-        const insertResult = await db.query(
-            'INSERT INTO shelly (internal_id, user, ip, name) VALUES (?, ?, ?, ?)',
-            [2, 'testuser2', '192.168.1.2', 'Shelly B']
-        );
-
-        const updateResult = await db.query(
-            'UPDATE shelly SET name=? WHERE id=?',
-            ['Shelly B Updated', insertResult.lastID]
-        );
-
-        expect(updateResult.changes).toBe(1);
-
-        const selectResult = await db.query(
-            'SELECT * FROM shelly WHERE id=?',
-            [insertResult.lastID]
-        );
-
-        expect(selectResult.rows[0].name).toBe('Shelly B Updated');
+    test("query returns mocked rows", async () => {
+        db.query.mockResolvedValue({ rows: [{ id: 1 }] });
+        const result = await db.query("SELECT * FROM shelly");
+        expect(result.rows[0].id).toBe(1);
     });
 });

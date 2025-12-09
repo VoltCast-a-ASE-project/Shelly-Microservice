@@ -7,8 +7,6 @@ async function init() {
         driver: sqlite3.Database
     });
 
-    //await db.exec(`DROP TABLE shelly`);
-
     await db.exec(`
         CREATE TABLE IF NOT EXISTS shelly (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

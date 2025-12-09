@@ -4,8 +4,10 @@ const shellyRouter = require('../VMC/routes/shelly');
 const db = require('../database/database');
 
 jest.mock('../database/database', () => ({
+    testDatabase: jest.fn().mockResolvedValue(true),
     query: jest.fn(),
 }));
+
 
 const app = express();
 app.use(express.json());
