@@ -47,6 +47,8 @@ This route helps to check if the Service works:
   "id": "ShellyID",
   "ip": "IPv4 Address",
   "name": "ShellyName",
+  "user": "userID",
+  "internal_id" : "internal ShellyID",
   "isActivated": true  
 }
 ```
@@ -58,6 +60,8 @@ This route helps to check if the Service works:
   "id": "ShellyID",
   "ip": "IPv4 Address",
   "name": "ShellyName",
+  "user": "userID",
+  "internal_id" : "internal ShellyID",
   "isActivated": true  
 }
 ```
@@ -69,6 +73,8 @@ This route helps to check if the Service works:
   "id": "ShellyID",
   "ip": "IPv4 Address",
   "name": "ShellyName",
+  "user": "userID",
+  "internal_id" : "internal ShellyID",
   "isActivated": true  
 }
 ```
