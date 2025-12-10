@@ -27,7 +27,7 @@ describe('SQLite Database Wrapper', () => {
 
     test("query returns mocked rows for SELECT", async () => {
         const result = await db.query("SELECT * FROM shelly");
-        expect(result.rows[0].id).toBe(1); // kommt aus mock von sqlite.all
+        expect(result.rows[0].id).toBe(1);
     });
 
     test("query returns lastID and changes for INSERT/UPDATE", async () => {
