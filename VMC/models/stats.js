@@ -14,6 +14,9 @@ module.exports = class ShellyStats {
         this.temperature = data.temperature;
     }
 
+    /**
+        calls the Shelly to get the current status of the device and returns a JSONObject with the retrieved information
+    */
     static async getShellyStats(id) {
         try {
             const shelly = await ShellyDevice.getShellyDeviceByID(id);
@@ -21,8 +24,10 @@ module.exports = class ShellyStats {
             if (!shelly) return false;
 
             const url = "http://"+shelly.ip+"/rpc/Switch.GetStatus?id="+shelly.internal_id;
+
             const response = await fetch(url);
             if (!response.ok) {
+                //to indicate no data is found
                 return null;
             }
 
@@ -45,6 +50,9 @@ module.exports = class ShellyStats {
         }
     }
 
+    /**
+        switches the Shelly on and off with a request to the device
+    */
     static async setActivationStatusForShelly(ip, id,status) {
         const url = "http://"+ip+"/rpc/Switch.Set?id="+id+"&on="+status;
         console.log(url);
@@ -57,13 +65,19 @@ module.exports = class ShellyStats {
         }
     }
 
+    /**
+        handles the switching on and off for a shelly device
+    */
     static async setSwitchById(id, switchStatus) {
         try {
+            // get Shelly from DB to retrieve IP and internal_ip of Shelly within the network
             const shelly = await ShellyDevice.getShellyDeviceByID(id);
             if (!shelly) return false;
 
+            // sets the status of the Shelly with a request to the device
             const result = await this.setActivationStatusForShelly(shelly.ip, shelly.internal_id, switchStatus);
             if (result) {
+                //update the status in the DB if successful
                 await ShellyDevice.updateShellyDeviceActivationStatus({ id, isActivated: switchStatus });
             }
 

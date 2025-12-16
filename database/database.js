@@ -39,7 +39,9 @@ async function init() {
 
 const dbPromise = init();
 
-
+/**
+    Query Wrapper to handle queries uniformly
+*/
 const dbWrapper = {
     query: async (sql, params = []) => {
         const db = await dbPromise;
@@ -59,6 +61,9 @@ const dbWrapper = {
     }
 };
 
+/**
+    test call to DB to check if it is up and running
+*/
 dbWrapper.testDatabase = async () => {
     try {
         await dbWrapper.query("SELECT 1");

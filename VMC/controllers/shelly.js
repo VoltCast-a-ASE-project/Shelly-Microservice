@@ -1,5 +1,8 @@
 const ShellyDevice = require('../models/shelly');
 
+/**
+    retrieves the information for one Shelly Device from the DB by ID and handles responses
+*/
 exports.getShellyDevice = async(req,res)=>{
     try {
         const id = req.params.id;
@@ -20,6 +23,9 @@ exports.getShellyDevice = async(req,res)=>{
     }
 }
 
+/**
+    retrieves the information for all Shelly Devices for one user and handles responses
+*/
 exports.getAllShellyDeviceByUser = async (req, res) => {
     try {
         const user = req.params.user;
@@ -38,6 +44,9 @@ exports.getAllShellyDeviceByUser = async (req, res) => {
 };
 
 
+/**
+    adds one new Shelly Device to the DB and handles responses
+*/
 exports.addShellyDevice = async (req, res) => {
     try {
         const {
@@ -56,6 +65,7 @@ exports.addShellyDevice = async (req, res) => {
 
         const newShellyDeviceID = await ShellyDevice.addShellyDevice(newShellyDevice);
 
+        //return the new ShellyID for future references
         res.status(200).json({ message: 'Added ShellyDevice successfully.', id: newShellyDeviceID });
     } catch (err) {
         console.log(err);
@@ -63,6 +73,9 @@ exports.addShellyDevice = async (req, res) => {
     }
 };
 
+/**
+    updates a Shelly Device with a call to the DB by ID and handles responses
+*/
 exports.updateShellyDevice = async (req, res) => {
     try {
         const {
@@ -98,6 +111,9 @@ exports.updateShellyDevice = async (req, res) => {
 };
 
 
+/**
+    deletes a Shelly with a call to the DB and handles responses
+*/
 exports.deleteShellyDevice = async (req, res) => {
     try {
         const id = req.params.id;

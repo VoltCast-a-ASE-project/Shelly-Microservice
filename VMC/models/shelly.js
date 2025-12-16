@@ -10,6 +10,9 @@ module.exports = class ShellyDevice{
         this.isActivated = data.isActivated;
     }
 
+    /**
+        get a shelly by id from the DB and parse into a ShellyDevice Object
+    */
     static async getShellyDeviceByID(shellyID) {
         try {
             const result = await db.query(
@@ -38,6 +41,9 @@ module.exports = class ShellyDevice{
         }
     }
 
+    /**
+        get all shellys for a user and map them into an array of ShellyDevices
+    */
     static async getAllShellyDevicesByUser(user) {
         try {
             const result = await db.query(
@@ -65,6 +71,9 @@ module.exports = class ShellyDevice{
     }
 
 
+    /**
+        add new Shelly to DB
+    */
     static async addShellyDevice(shellyDevice){
         try{
             const result = await db.query(
@@ -77,6 +86,9 @@ module.exports = class ShellyDevice{
         }
     }
 
+    /**
+        update the isActivated status of the Shelly in the DB (true, false)
+    */
     static async updateShellyDeviceActivationStatus(shellyDevice) {
         try{
             const result = await db.query(
@@ -89,6 +101,9 @@ module.exports = class ShellyDevice{
         }
     }
 
+    /**
+        update Shelly in the DB with full description of shelly from the frontend
+    */
     static async updateShellyDevice(shellyDevice){
         try{
             const result = await db.query(
@@ -102,6 +117,9 @@ module.exports = class ShellyDevice{
     }
 
 
+    /**
+        delete Shelly from DB
+    */
     static async deleteShellyDevice(id){
         try{
             const result = await db.query(

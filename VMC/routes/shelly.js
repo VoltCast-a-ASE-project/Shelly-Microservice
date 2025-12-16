@@ -6,6 +6,7 @@ const router = express.Router();
 
 const ShellyController = require('../controllers/shelly');
 
+//validator for shellys on add and update
 const validateShellyUpdate = [
     body('id').isNumeric().withMessage('id cannot be empty.'),
     body('ip').isString().isLength({ min: 1 }).withMessage('IP-address cannot be empty.'),
@@ -22,6 +23,7 @@ const validateShellyAdd = [
     body('name').isString().isLength({ min: 1 }).withMessage('Name cannot be empty.'),
 ];
 
+// add a new Shelly
 router.post('/add', validateShellyAdd, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -30,6 +32,7 @@ router.post('/add', validateShellyAdd, (req, res, next) => {
     next();
 }, ShellyController.addShellyDevice);
 
+// update a Shelly
 router.put('/update', validateShellyUpdate, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,10 +41,13 @@ router.put('/update', validateShellyUpdate, (req, res, next) => {
     next();
 }, ShellyController.updateShellyDevice);
 
+// get all Shellys by User
 router.get('/user/:user', ShellyController.getAllShellyDeviceByUser);
 
+// get one Shelly per id
 router.get('/:id', ShellyController.getShellyDevice);
 
+// delete a Shelly
 router.delete('/:id', ShellyController.deleteShellyDevice);
 
 module.exports = router;

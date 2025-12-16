@@ -6,10 +6,13 @@ const router = express.Router();
 
 const StatsController = require('../controllers/stats');
 
+
+//retrieve stats route
 router.get('/stats/:id', StatsController.getShellyStats);
 
 const switchValidator = [body('isActivated').isBoolean().withMessage('isActivated must be a boolean.')];
 
+//switch shelly on and off route
 router.post('/switch/:id', switchValidator, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -17,5 +20,7 @@ router.post('/switch/:id', switchValidator, (req, res, next) => {
     }
     next();
 }, StatsController.setShellyIsActivatedStatus);
+
+
 
 module.exports = router;

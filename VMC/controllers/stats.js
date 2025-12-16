@@ -1,5 +1,8 @@
 const Stats = require('../models/stats');
 
+/**
+    retrieves the stats for a Shelly Device with the help of the stats model that sends request to the plug and handles responses
+*/
 exports.getShellyStats = async(req,res)=>{
     try {
         const id = req.params.id;
@@ -20,6 +23,9 @@ exports.getShellyStats = async(req,res)=>{
     }
 }
 
+/**
+    handles the switching on and off for a Shelly
+*/
 exports.setShellyIsActivatedStatus = async(req,res)=>{
     try {
         const id = req.params.id;
