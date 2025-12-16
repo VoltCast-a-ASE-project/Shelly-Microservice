@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./database/database');
 const shellyRoutes = require('./VMC/routes/shelly');
+const statsRoutes = require('./VMC/routes/stats');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
@@ -22,6 +23,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.use('/shelly', shellyRoutes);
+app.use('/shelly', statsRoutes);
 
 app.listen(port, async () => {
     try {
