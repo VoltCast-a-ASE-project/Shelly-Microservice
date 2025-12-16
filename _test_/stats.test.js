@@ -2,6 +2,10 @@ const ShellyStats = require('../VMC/models/stats');
 const ShellyDevice = require('../VMC/models/shelly');
 
 jest.mock('../VMC/models/shelly');
+jest.mock('../database/database', () => ({
+    testDatabase: jest.fn().mockResolvedValue(true),
+    query: jest.fn(),
+}));
 
 describe('ShellyStats', () => {
     const dummyShelly = { id: 1, internal_id: 123, ip: '192.168.1.100' };
