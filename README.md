@@ -33,4 +33,8 @@ npm test -- --coverage
 ```
 
 ## Endpoints
-Swagger UI at http://localhost:8083/api-docs/
+To trigger swagger, please run:
+```bash
+npm run swagger
+```
+Then start the service.js and the swagger UI can be found at http://localhost:8083/api-docs/
