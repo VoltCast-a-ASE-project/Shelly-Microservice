@@ -14,7 +14,12 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 # copy all
-COPY . .
+COPY service.js .
+COPY VMC/controllers/ VMC/controllers/
+COPY VMC/models/ VMC/models/
+COPY VMC/routes/ VMC/routes/
+COPY database/ database/
+COPY swagger.js .
 
 #run swagger
 RUN npm run swagger
@@ -29,6 +34,9 @@ ENV NODE_ENV=production
 
 # get app dir
 COPY --from=build /app ./
+
+# create db volume
+VOLUME ["/app/database"]
 
 # set user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
