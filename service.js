@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./database/database');
 const shellyRoutes = require('./VMC/routes/shelly');
+const statsRoutes = require('./VMC/routes/stats');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
@@ -12,20 +13,24 @@ const port = 8083;
 
 app.use(express.json());
 
+// route for swagger UI with autogen swagger
 app.use('/api-docs', swaggerUi.serve);
 app.use('/api-docs/swagger.json', (req,res) => res.json(swaggerDocument));
 app.get('/api-docs', swaggerUi.setup(swaggerDocument, { swaggerOptions : { displayRequestDuration : true, url: "/api-docs/swagger-output.json",}, explorer: true, }));
 
-
+// hello request
 app.get('/hello', (req, res) => {
   res.status(200).json({ message: 'Hello from Shelly Microservice!' });
 });
 
+// routes for add/update/delete shellys and their stats
 app.use('/shelly', shellyRoutes);
+app.use('/shelly', statsRoutes);
 
 app.listen(port, async () => {
     try {
-       await db.testDatabase();
+        // test call to the DB to check if it is running properly when startin the service
+        await db.testDatabase();
         console.log('Database connection successful.:');
 
         console.log(`Listening on port ${port}`);

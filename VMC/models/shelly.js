@@ -10,6 +10,9 @@ module.exports = class ShellyDevice{
         this.isActivated = data.isActivated;
     }
 
+    /**
+        get a shelly by id from the DB and parse into a ShellyDevice Object
+    */
     static async getShellyDeviceByID(shellyID) {
         try {
             const result = await db.query(
@@ -34,10 +37,45 @@ module.exports = class ShellyDevice{
                 return null;
             }
         } catch (error) {
-            console.error(error);
+            console.error('Get Shelly failed:', error.message);
+            throw error;
         }
     }
 
+    /**
+        get all shellys for a user and map them into an array of ShellyDevices
+    */
+    static async getAllShellyDevicesByUser(user) {
+        try {
+            const result = await db.query(
+                'SELECT * FROM shelly WHERE `user` = ?',
+                [user]
+            );
+
+            const shellys = [];
+
+            for (const row of result.rows) {
+                shellys.push(new ShellyDevice({
+                    id: row.id,
+                    ip: row.ip,
+                    user: row.user,
+                    internal_id: row.internal_id,
+                    name: row.name,
+                    isActivated: row.isActivated,
+                }));
+            }
+
+            return shellys;
+        } catch (error) {
+            console.error('Get all Shellys failed:', error.message);
+            throw error;
+        }
+    }
+
+
+    /**
+        add new Shelly to DB
+    */
     static async addShellyDevice(shellyDevice){
         try{
             const result = await db.query(
@@ -46,10 +84,14 @@ module.exports = class ShellyDevice{
             );
             return result.lastID;
         }catch (error) {
-            console.error(error);
+            console.error('Add Shelly failed:', error.message);
+            throw error;
         }
     }
 
+    /**
+        update the isActivated status of the Shelly in the DB (true, false)
+    */
     static async updateShellyDeviceActivationStatus(shellyDevice) {
         try{
             const result = await db.query(
@@ -58,10 +100,14 @@ module.exports = class ShellyDevice{
             );
             return result.changes>0;
         }catch (error) {
-            console.error(error);
+            console.error('Update Shelly Status failed:', error.message);
+            throw error;
         }
     }
 
+    /**
+        update Shelly in the DB with full description of shelly from the frontend
+    */
     static async updateShellyDevice(shellyDevice){
         try{
             const result = await db.query(
@@ -70,11 +116,15 @@ module.exports = class ShellyDevice{
             );
             return result.changes>0
         }catch (error) {
-            console.error(error);
+            console.error('Update Shelly failed:', error.message);
+            throw error;
         }
     }
 
 
+    /**
+        delete Shelly from DB
+    */
     static async deleteShellyDevice(id){
         try{
             const result = await db.query(
@@ -84,8 +134,8 @@ module.exports = class ShellyDevice{
             return result.changes>0;
         }
         catch (error){
-            console.error(error);
-            return false;
+            console.error('Delete Shelly failed:', error.message);
+            throw error;
         }
     }
 }

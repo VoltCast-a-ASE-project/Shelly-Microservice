@@ -1,5 +1,8 @@
 const ShellyDevice = require('../models/shelly');
 
+/**
+    retrieves the information for one Shelly Device from the DB by ID and handles responses
+*/
 exports.getShellyDevice = async(req,res)=>{
     try {
         const id = req.params.id;
@@ -9,17 +12,45 @@ exports.getShellyDevice = async(req,res)=>{
         }
 
         const shellyDevice = await ShellyDevice.getShellyDeviceByID(id);
-        if(shellyDevice === null){
+        if(!shellyDevice){
+            console.log("getShellyDevice request unsuccessful: Did not find Shelly Device with the given ID.");
             return res.status(404).json({ message: 'No ShellyDevice found with this ID.'});
         }
-
+        console.log("getShellyDevice request successful: Found Shelly Device.");
         res.status(200).json(shellyDevice);
     }catch (err) {
-        console.log("Error getShellyDevice:",err);
+        console.err("getShellyDevice request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: `Cannot get ShellyDevice with ID ${id}.` });
     }
 }
 
+/**
+    retrieves the information for all Shelly Devices for one user and handles responses
+*/
+exports.getAllShellyDeviceByUser = async (req, res) => {
+    try {
+        const user = req.params.user;
+
+        if (!user) {
+            console.log("getAllShellyDevicesByUser request unsuccessful: No User given.");
+            return res.status(400).json({message: 'User is required to retrieve Shelly Devices.'});
+        }
+
+        const shellyDevices = await ShellyDevice.getAllShellyDevicesByUser(user);
+        console.log("getAllShellyDevicesByUser request successful: Found all Shelly Devices for User.");
+        res.status(200).json(shellyDevices);
+    } catch (err) {
+        console.log("getAllShellyDevicesByUser request unsuccessful: Internal Error.");
+        console.log(err);
+        res.status(500).json({message: 'Cannot get ShellyDevices.'});
+    }
+};
+
+
+/**
+    adds one new Shelly Device to the DB and handles responses
+*/
 exports.addShellyDevice = async (req, res) => {
     try {
         const {
@@ -38,17 +69,19 @@ exports.addShellyDevice = async (req, res) => {
 
         const newShellyDeviceID = await ShellyDevice.addShellyDevice(newShellyDevice);
 
-        if (newShellyDeviceID) {
-            res.status(200).json({ message: 'Added ShellyDevice successfully.', id: newShellyDeviceID });
-        } else {
-            res.status(400).json({ message: 'Cannot add ShellyDevice.' });
-        }
+        //return the new ShellyID for future references
+        console.log("addShellyDevice request successful: Added Shelly Device.");
+        res.status(200).json({ message: 'Added ShellyDevice successfully.', id: newShellyDeviceID });
     } catch (err) {
+        console.log("addShellyDevice request unsuccessful: Internal Error.");
         console.log(err);
         res.status(500).json({ message: 'Cannot add ShellyDevice.' });
     }
 };
 
+/**
+    updates a Shelly Device with a call to the DB by ID and handles responses
+*/
 exports.updateShellyDevice = async (req, res) => {
     try {
         const {
@@ -72,29 +105,37 @@ exports.updateShellyDevice = async (req, res) => {
         const result = await ShellyDevice.updateShellyDevice(updatedShellyDevice);
 
         if (result) {
+            console.log("updateShellyDevice request successful: Updated Shelly Device.");
             res.status(200).json({ message: 'Updated ShellyDevice successfully.' });
         } else {
+            console.log("updateShellyDevice request unsuccessful: Not able to update Shelly Device.");
             res.status(400).json({ message: 'Cannot update ShellyDevice.' });
         }
 
     } catch (err) {
+        console.log("updateShellyDevice request unsuccessful: Internal Error.");
         console.log(err);
         res.status(500).json({ message: 'Cannot update ShellyDevice.' });
     }
 };
 
 
+/**
+    deletes a Shelly with a call to the DB and handles responses
+*/
 exports.deleteShellyDevice = async (req, res) => {
     try {
         const id = req.params.id;
 
         const result = await ShellyDevice.deleteShellyDevice(id);
         if (!result) {
+            console.log("deleteShellyDevice request unsuccessful: No Shelly Device found to delete.");
             return res.status(404).json({ message: 'ShellyDevice not found.' });
         }
-
+        console.log("deleteShellyDevice request successful: Deleted Shelly Device.");
         res.status(200).json({ message: 'ShellyDevice deleted successfully.' });
     } catch (err) {
+        console.log("deleteShellyDevice request unsuccessful: Internal Error.");
         console.log(err);
         res.status(500).json({ message: 'Cannot delete ShellyDevice.' });
     }
