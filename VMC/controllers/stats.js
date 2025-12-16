@@ -21,6 +21,7 @@ exports.getShellyStats = async(req,res)=>{
         res.status(200).json(stats);
     }catch (err) {
         console.log("getShellyStats request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: `Cannot get ShellyStats with ID ${id}.` });
     }
 }
@@ -45,6 +46,7 @@ exports.setShellyIsActivatedStatus = async(req,res)=>{
 
     } catch (err) {
         console.log("setShellyIsActivatedStatus request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: 'Cannot update Shelly switch.' });
     }
 }

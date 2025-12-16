@@ -20,6 +20,7 @@ exports.getShellyDevice = async(req,res)=>{
         res.status(200).json(shellyDevice);
     }catch (err) {
         console.err("getShellyDevice request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: `Cannot get ShellyDevice with ID ${id}.` });
     }
 }
@@ -41,6 +42,7 @@ exports.getAllShellyDeviceByUser = async (req, res) => {
         res.status(200).json(shellyDevices);
     } catch (err) {
         console.log("getAllShellyDevicesByUser request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({message: 'Cannot get ShellyDevices.'});
     }
 };
@@ -72,6 +74,7 @@ exports.addShellyDevice = async (req, res) => {
         res.status(200).json({ message: 'Added ShellyDevice successfully.', id: newShellyDeviceID });
     } catch (err) {
         console.log("addShellyDevice request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: 'Cannot add ShellyDevice.' });
     }
 };
@@ -111,6 +114,7 @@ exports.updateShellyDevice = async (req, res) => {
 
     } catch (err) {
         console.log("updateShellyDevice request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: 'Cannot update ShellyDevice.' });
     }
 };
@@ -132,6 +136,7 @@ exports.deleteShellyDevice = async (req, res) => {
         res.status(200).json({ message: 'ShellyDevice deleted successfully.' });
     } catch (err) {
         console.log("deleteShellyDevice request unsuccessful: Internal Error.");
+        console.log(err);
         res.status(500).json({ message: 'Cannot delete ShellyDevice.' });
     }
 };
