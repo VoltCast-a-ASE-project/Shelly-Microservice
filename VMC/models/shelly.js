@@ -34,7 +34,7 @@ module.exports = class ShellyDevice{
                 return null;
             }
         } catch (error) {
-            console.error(error);
+            throw error;
         }
     }
 
@@ -60,7 +60,6 @@ module.exports = class ShellyDevice{
 
             return shellys;
         } catch (error) {
-            console.error(error);
             throw error;
         }
     }
@@ -74,7 +73,7 @@ module.exports = class ShellyDevice{
             );
             return result.lastID;
         }catch (error) {
-            console.error(error);
+            throw error;
         }
     }
 
@@ -86,7 +85,7 @@ module.exports = class ShellyDevice{
             );
             return result.changes>0;
         }catch (error) {
-            console.error(error);
+            throw error;
         }
     }
 
@@ -98,7 +97,7 @@ module.exports = class ShellyDevice{
             );
             return result.changes>0
         }catch (error) {
-            console.error(error);
+            throw error;
         }
     }
 
@@ -112,8 +111,7 @@ module.exports = class ShellyDevice{
             return result.changes>0;
         }
         catch (error){
-            console.error(error);
-            return false;
+            throw error;
         }
     }
 }

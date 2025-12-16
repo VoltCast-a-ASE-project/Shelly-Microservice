@@ -3,14 +3,13 @@ const ShellyDevice = require('../models/shelly');
 exports.getShellyDevice = async(req,res)=>{
     try {
         const id = req.params.id;
-        console.log("Im here");
 
         if (!id) {
             return res.status(400).json({ message: 'ID for ShellyDevice is required.' });
         }
 
         const shellyDevice = await ShellyDevice.getShellyDeviceByID(id);
-        if(shellyDevice === null){
+        if(!shellyDevice){
             return res.status(404).json({ message: 'No ShellyDevice found with this ID.'});
         }
 
@@ -26,9 +25,7 @@ exports.getAllShellyDeviceByUser = async (req, res) => {
         const user = req.params.user;
 
         if (!user) {
-            return res.status(400).json({
-                message: 'User is required to retrieve Shelly Devices.'
-            });
+            return res.status(400).json({message: 'User is required to retrieve Shelly Devices.'});
         }
 
         const shellyDevices = await ShellyDevice.getAllShellyDevicesByUser(user);
@@ -36,9 +33,7 @@ exports.getAllShellyDeviceByUser = async (req, res) => {
         res.status(200).json(shellyDevices);
     } catch (err) {
         console.error("Error getAllShellyDevicesByUser:", err);
-        res.status(500).json({
-            message: 'Cannot get ShellyDevices.'
-        });
+        res.status(500).json({message: 'Cannot get ShellyDevices.'});
     }
 };
 
@@ -61,11 +56,7 @@ exports.addShellyDevice = async (req, res) => {
 
         const newShellyDeviceID = await ShellyDevice.addShellyDevice(newShellyDevice);
 
-        if (newShellyDeviceID) {
-            res.status(200).json({ message: 'Added ShellyDevice successfully.', id: newShellyDeviceID });
-        } else {
-            res.status(400).json({ message: 'Cannot add ShellyDevice.' });
-        }
+        res.status(200).json({ message: 'Added ShellyDevice successfully.', id: newShellyDeviceID });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: 'Cannot add ShellyDevice.' });
