@@ -38,6 +38,34 @@ module.exports = class ShellyDevice{
         }
     }
 
+    static async getAllShellyDevicesByUser(user) {
+        try {
+            const result = await db.query(
+                'SELECT * FROM shelly WHERE `user` = ?',
+                [user]
+            );
+
+            const shellys = [];
+
+            for (const row of result.rows) {
+                shellys.push(new ShellyDevice({
+                    id: row.id,
+                    ip: row.ip,
+                    user: row.user,
+                    internal_id: row.internal_id,
+                    name: row.name,
+                    isActivated: row.isActivated,
+                }));
+            }
+
+            return shellys;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
     static async addShellyDevice(shellyDevice){
         try{
             const result = await db.query(

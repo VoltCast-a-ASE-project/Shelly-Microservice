@@ -38,6 +38,7 @@ router.put('/update', validateShellyUpdate, (req, res, next) => {
     next();
 }, ShellyController.updateShellyDevice);
 
+router.get('/user/:user', ShellyController.getAllShellyDeviceByUser);
 
 router.get('/:id', ShellyController.getShellyDevice);
 
