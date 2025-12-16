@@ -1,19 +1,19 @@
-# get node image for build
-FROM node:20-alpine AS build
+FROM node:20-bullseye AS build
 
-# create work dir
 WORKDIR /app
 
-# installs for sqlite
-RUN apk add --no-cache sqlite
+# Install build tools for native modules
+RUN apt-get update && apt-get install -y \
+    python3 make g++ sqlite3 libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# copy necessary installs etc.
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# create project
+# Install dependencies
 RUN npm ci --omit=dev
 
-# copy all
+# Copy project files
 COPY service.js .
 COPY VMC/controllers/ VMC/controllers/
 COPY VMC/models/ VMC/models/
@@ -21,29 +21,29 @@ COPY VMC/routes/ VMC/routes/
 COPY database/ database/
 COPY swagger.js .
 
-#run swagger
+# Generate swagger docs
 RUN npm run swagger
 
-# get node image for run
-FROM node:20-alpine
+
+FROM node:20-bullseye
 
 WORKDIR /app
 
-# set env to production
-ENV NODE_ENV=production
-
-# get app dir
+# Copy from build stage
 COPY --from=build /app ./
 
-# create db volume
+# Set environment
+ENV NODE_ENV=production
+
+# Make database persistent
 VOLUME ["/app/database"]
 
-# set user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Non-root user
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 USER appuser
 
-# expose on port 8083
+# Expose port
 EXPOSE 8083
 
-# start service
+# Start service
 CMD ["node", "service.js"]
