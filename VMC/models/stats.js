@@ -45,7 +45,7 @@ module.exports = class ShellyStats {
                 temperature: responseJson.temperature.tC,
             });
         } catch (error) {
-            console.error(error.message);
+            console.error('getShellyStats failed:', error.message);
             throw error;
         }
     }
@@ -60,7 +60,7 @@ module.exports = class ShellyStats {
             const response = await fetch(url);
             return response.ok;
         } catch (error) {
-            console.error(error.message);
+            console.error('SwitchShelly failed:', error.message);
             return false;
         }
     }
