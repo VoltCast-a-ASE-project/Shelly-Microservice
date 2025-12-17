@@ -1,7 +1,9 @@
 const ShellyStats = require('../VMC/models/stats');
 const ShellyDevice = require('../VMC/models/shelly');
+const ShellyApi = require('../VMC/models/shellyApi');
 
 jest.mock('../VMC/models/shelly');
+jest.mock('../VMC/models/shellyApi');
 jest.mock('../database/database', () => ({
     testDatabase: jest.fn().mockResolvedValue(true),
     query: jest.fn(),
@@ -10,22 +12,15 @@ jest.mock('../database/database', () => ({
 describe('ShellyStats', () => {
     const dummyShelly = { id: 1, internal_id: 123, ip: '192.168.1.100' };
     const dummyApiResponse = {
-        ok: true,
-        json: async () => ({
-            output: true,
-            apower: 50,
-            voltage: 230,
-            freq: 50,
-            current: 0.5,
-            aenergy: { total: 1000 },
-            ret_aenergy: { total: 100 },
-            temperature: { tC: 25 }
-        })
-    };
-
-    beforeAll(() => {
-        global.fetch = jest.fn();
-    });
+       output: true,
+       apower: 50,
+       voltage: 230,
+       freq: 50,
+       current: 0.5,
+       aenergy: { total: 1000 },
+       ret_aenergy: { total: 100 },
+       temperature: { tC: 25 }
+     };
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -33,12 +28,13 @@ describe('ShellyStats', () => {
 
     test('returns ShellyStats object if device exists and fetch ok', async () => {
         ShellyDevice.getShellyDeviceByID.mockResolvedValue(dummyShelly);
-        fetch.mockResolvedValue(dummyApiResponse);
+        ShellyApi.getSwitchStatus.mockResolvedValue(dummyApiResponse);
 
         const result = await ShellyStats.getShellyStats(1);
 
         expect(result).toBeInstanceOf(ShellyStats);
         expect(result.isActivated).toBe(true);
+        expect(result.apower).toBe(50);
     });
 
     test('returns false if device does not exist', async () => {
@@ -50,7 +46,7 @@ describe('ShellyStats', () => {
 
     test('returns null if fetch response not ok', async () => {
         ShellyDevice.getShellyDeviceByID.mockResolvedValue(dummyShelly);
-        fetch.mockResolvedValue({ ok: false });
+        ShellyApi.getSwitchStatus.mockResolvedValue(null);
 
         const result = await ShellyStats.getShellyStats(1);
         expect(result).toBeNull();
@@ -58,27 +54,22 @@ describe('ShellyStats', () => {
 
     test('throws error if fetch throws', async () => {
         ShellyDevice.getShellyDeviceByID.mockResolvedValue(dummyShelly);
-        fetch.mockRejectedValue(new Error('fetch failed'));
+        ShellyApi.getSwitchStatus.mockRejectedValue(new Error('api failed'));
 
-        await expect(ShellyStats.getShellyStats(1)).rejects.toThrow('fetch failed');
+        await expect(ShellyStats.getShellyStats(1)).rejects.toThrow('api failed');
     });
 
     test('returns true if fetch ok', async () => {
-        fetch.mockResolvedValue({ ok: true });
+        ShellyApi.setSwitch.mockResolvedValue(true);
 
         const result = await ShellyStats.setActivationStatusForShelly('1.1.1.1', 123, true);
+
         expect(result).toBe(true);
+        expect(ShellyApi.setSwitch).toHaveBeenCalledWith('1.1.1.1', 123, true);
     });
 
     test('returns false if fetch not ok', async () => {
-        fetch.mockResolvedValue({ ok: false });
-
-        const result = await ShellyStats.setActivationStatusForShelly('1.1.1.1', 123, true);
-        expect(result).toBe(false);
-    });
-
-    test('returns false if fetch throws', async () => {
-        fetch.mockRejectedValue(new Error('network error'));
+        ShellyApi.setSwitch.mockResolvedValue(false);
 
         const result = await ShellyStats.setActivationStatusForShelly('1.1.1.1', 123, true);
         expect(result).toBe(false);
@@ -87,10 +78,12 @@ describe('ShellyStats', () => {
     test('updates switch and calls updateShellyDeviceActivationStatus', async () => {
         ShellyDevice.getShellyDeviceByID.mockResolvedValue(dummyShelly);
         ShellyDevice.updateShellyDeviceActivationStatus = jest.fn().mockResolvedValue(true);
-        jest.spyOn(ShellyStats, 'setActivationStatusForShelly').mockResolvedValue(true);
+        ShellyApi.setSwitch.mockResolvedValue(true);
 
         const result = await ShellyStats.setSwitchById(1, true);
+
         expect(result).toBe(true);
+        expect(ShellyApi.setSwitch).toHaveBeenCalledWith(dummyShelly.ip, dummyShelly.internal_id, true);
         expect(ShellyDevice.updateShellyDeviceActivationStatus).toHaveBeenCalledWith({ id: 1, isActivated: true });
     });
 
@@ -103,8 +96,7 @@ describe('ShellyStats', () => {
 
     test('returns false if setActivationStatusForShelly returns false', async () => {
         ShellyDevice.getShellyDeviceByID.mockResolvedValue(dummyShelly);
-        jest.spyOn(ShellyStats, 'setActivationStatusForShelly').mockResolvedValue(false);
-        ShellyDevice.updateShellyDeviceActivationStatus = jest.fn();
+        ShellyApi.setSwitch.mockResolvedValue(false);
 
         const result = await ShellyStats.setSwitchById(1, true);
         expect(result).toBe(false);
