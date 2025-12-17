@@ -1,5 +1,5 @@
 const useMock = process.env.MOCK_SHELLY_API === 'true';
 
 module.exports = useMock
-  ? require('./shellyApi.mock')
-  : require('./shellyApi.real');
+  ? require('./shelly_api.mock')
+  : require('./shelly_api.real');

@@ -1,4 +1,4 @@
-const ShellyApi = require('../VMC/models/shellyApi');
+const ShellyApi = require('../VMC/models/shelly_api');
 
 describe('ShellyApi', () => {
     beforeAll(() => {

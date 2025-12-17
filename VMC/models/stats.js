@@ -1,5 +1,5 @@
 const ShellyDevice = require('../models/shelly');
-const ShellyApi = require('../models/shellyApi');
+const ShellyApi = require('../models/shelly_api');
 
 module.exports = class ShellyStats {
     constructor(data) {
