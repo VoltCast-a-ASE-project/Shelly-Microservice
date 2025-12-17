@@ -1,0 +1,26 @@
+# Node
+node_modules
+npm-debug.log
+
+# Tests & Coverage
+_test_
+_mocks_
+coverage
+
+# Git
+.git
+.gitignore
+.github
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Docs
+README.md
+
+# Swagger
+swagger-output.json
+
+# Env
+.env
