@@ -4,7 +4,33 @@ To gather all the necessary information, the IP-address of the device is needed.
 
 A Shelly is designed for smart homes for power conservation and automation. The API used for the Shelly plugin can be found here: https://shelly-api-docs.shelly.cloud/gen2/Devices/Gen3/ShellyAZPlug/.
 
-## Setup
+## Docker
+Build Docker image:
+```bash
+docker build --no-cache -t shelly-local .
+```
+
+Start Docker container:
+```bash
+docker run -d -p 8083:8083 --name shelly shelly-local
+```
+
+Stop Shelly container:
+```bash
+docker stop shelly
+```
+
+Start Shelly container again:
+```bash
+docker start -d shelly
+```
+
+Remove Shelly container:
+```bash
+docker rm shelly
+```
+
+## Setup - Locally
 Follow these steps to set up the Shelly Microservice locally:
 
 ### Prerequisites
