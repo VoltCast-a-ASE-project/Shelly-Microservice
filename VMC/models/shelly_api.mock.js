@@ -1,6 +1,9 @@
 const crypto = require('crypto');
 const deviceStates = new Map();
 
+/**
+    getState mock method
+*/
 function getState(key) {
     if (!deviceStates.has(key)) {
         deviceStates.set(key, {
@@ -17,6 +20,9 @@ function getState(key) {
     return deviceStates.get(key);
 }
 
+/**
+    secure random value generation
+*/
 function secureRandomFloat(min, max) {
     const buf = crypto.randomBytes(4);
     const randomInt = buf.readUInt32BE(0);
@@ -24,6 +30,9 @@ function secureRandomFloat(min, max) {
     return +(min + normalized * (max - min)).toFixed(2);
 }
 
+/**
+    getSwitchStatus mock method
+*/
 async function getSwitchStatus(ip, internalId) {
     const state = getState(`${ip}-${internalId}`);
 
@@ -39,6 +48,7 @@ async function getSwitchStatus(ip, internalId) {
 
     return state;
 }
+
 
 async function setSwitch(ip, internalId, status) {
     const state = getState(`${ip}-${internalId}`);
