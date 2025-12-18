@@ -4,9 +4,9 @@ const ShellyDevice = require('../models/shelly');
     retrieves the information for one Shelly Device from the DB by ID and handles responses
 */
 exports.getShellyDevice = async(req,res)=>{
-    try {
-        const id = req.params.id;
+    const id = req.params.id;
 
+    try {
         if (!id) {
             return res.status(400).json({ message: 'ID for ShellyDevice is required.' });
         }
@@ -19,7 +19,7 @@ exports.getShellyDevice = async(req,res)=>{
         console.log("getShellyDevice request successful: Found Shelly Device.");
         res.status(200).json(shellyDevice);
     }catch (err) {
-        console.err("getShellyDevice request unsuccessful: Internal Error.");
+        console.log("getShellyDevice request unsuccessful: Internal Error.");
         console.log(err);
         res.status(500).json({ message: `Cannot get ShellyDevice with ID ${id}.` });
     }

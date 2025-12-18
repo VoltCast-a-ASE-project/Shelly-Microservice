@@ -4,9 +4,8 @@ const Stats = require('../models/stats');
     retrieves the stats for a Shelly Device with the help of the stats model that sends request to the plug and handles responses
 */
 exports.getShellyStats = async(req,res)=>{
+    const id = req.params.id;
     try {
-        const id = req.params.id;
-
         if (!id) {
             console.log("getShellyStats request unsuccessful: No ID given.");
             return res.status(400).json({ message: 'ID for ShellyDevice is required.' });

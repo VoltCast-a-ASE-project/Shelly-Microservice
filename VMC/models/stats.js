@@ -1,4 +1,5 @@
 const ShellyDevice = require('../models/shelly');
+const ShellyApi = require('../models/shelly_api');
 
 module.exports = class ShellyStats {
     constructor(data) {
@@ -20,18 +21,16 @@ module.exports = class ShellyStats {
     static async getShellyStats(id) {
         try {
             const shelly = await ShellyDevice.getShellyDeviceByID(id);
-            
+
             if (!shelly) return false;
 
-            const url = "http://"+shelly.ip+"/rpc/Switch.GetStatus?id="+shelly.internal_id;
+            const responseJson = await ShellyApi.getSwitchStatus(
+                shelly.ip,
+                shelly.internal_id
+            );
 
-            const response = await fetch(url);
-            if (!response.ok) {
-                //to indicate no data is found
-                return null;
-            }
+            if (!responseJson) return null;
 
-            const responseJson = await response.json();
             return new ShellyStats({
                 id: shelly.id,
                 shellyID: id,
@@ -54,15 +53,7 @@ module.exports = class ShellyStats {
         switches the Shelly on and off with a request to the device
     */
     static async setActivationStatusForShelly(ip, id,status) {
-        const url = "http://"+ip+"/rpc/Switch.Set?id="+id+"&on="+status;
-        console.log(url);
-        try{
-            const response = await fetch(url);
-            return response.ok;
-        } catch (error) {
-            console.error('SwitchShelly failed:', error.message);
-            return false;
-        }
+        return ShellyApi.setSwitch(ip, id, status);
     }
 
     /**
