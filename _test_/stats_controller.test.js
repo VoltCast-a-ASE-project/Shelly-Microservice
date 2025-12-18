@@ -2,6 +2,10 @@ const StatsController = require('../VMC/controllers/stats');
 const Stats = require('../VMC/models/stats');
 
 jest.mock('../VMC/models/stats');
+jest.mock('../database/database', () => ({
+    testDatabase: jest.fn().mockResolvedValue(true),
+    query: jest.fn(),
+}));
 
 describe('StatsController', () => {
   let req, res;

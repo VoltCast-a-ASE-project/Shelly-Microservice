@@ -4,6 +4,10 @@ const ShellyApi = require('../VMC/models/shelly_api');
 
 jest.mock('../VMC/models/shelly');
 jest.mock('../VMC/models/shelly_api');
+jest.mock('../database/database', () => ({
+    testDatabase: jest.fn().mockResolvedValue(true),
+    query: jest.fn(),
+}));
 
 describe('ShellyStats Model', () => {
   describe('getShellyStats', () => {
