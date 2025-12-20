@@ -33,7 +33,7 @@ module.exports = class ShellyStats {
 
             return new ShellyStats({
                 id: shelly.id,
-                shellyID: id,
+                shellyID: shelly.internal_id,
                 isActivated: responseJson.output,
                 apower: responseJson.apower,
                 voltage: responseJson.voltage,
