@@ -79,13 +79,13 @@ describe('ShellyController + Routes', () => {
         });
     });
 
-    describe('POST /shelly/add', () => {
+    describe('POST /shelly/', () => {
 
         it('successfully adds device', async () => {
             db.query.mockResolvedValue({ lastID: 1 });
 
             const res = await request(app)
-                .post('/shelly/add')
+                .post('/shelly/')
                 .send({ ip:'1', name:'A', user:'u', internal_id:0 });
 
             expect(res.status).toBe(200);
@@ -95,7 +95,7 @@ describe('ShellyController + Routes', () => {
 
         it('returns 400 on validation error', async () => {
             const res = await request(app)
-                .post('/shelly/add')
+                .post('/shelly/')
                 .send({ ip:'', name:'', user:'', internal_id:'abc' });
 
             expect(res.status).toBe(400);
@@ -106,20 +106,20 @@ describe('ShellyController + Routes', () => {
             db.query.mockRejectedValue(new Error('fail'));
 
             const res = await request(app)
-                .post('/shelly/add')
+                .post('/shelly/')
                 .send({ ip:'1', name:'A', user:'u', internal_id:0 });
 
             expect(res.status).toBe(500);
         });
     });
 
-    describe('PUT /shelly/update', () => {
+    describe('PUT /shelly/', () => {
 
         it('successfully updates device', async () => {
             db.query.mockResolvedValue({ changes: 1 });
 
             const res = await request(app)
-                .put('/shelly/update')
+                .put('/shelly/')
                 .send({ id:1, ip:'1', name:'A', user:'u', internal_id:0, isActivated:true });
 
             expect(res.status).toBe(200);
@@ -130,7 +130,7 @@ describe('ShellyController + Routes', () => {
             db.query.mockResolvedValue({ changes: 0 });
 
             const res = await request(app)
-                .put('/shelly/update')
+                .put('/shelly/')
                 .send({ id:1, ip:'1', name:'A', user:'u', internal_id:0, isActivated:true });
 
             expect(res.status).toBe(400);
@@ -140,7 +140,7 @@ describe('ShellyController + Routes', () => {
             db.query.mockRejectedValue(new Error('fail'));
 
             const res = await request(app)
-                .put('/shelly/update')
+                .put('/shelly/')
                 .send({ id:1, ip:'1', name:'A', user:'u', internal_id:0, isActivated:true });
 
             expect(res.status).toBe(500);
@@ -148,7 +148,7 @@ describe('ShellyController + Routes', () => {
 
         it('returns 400 on validation error', async () => {
             const res = await request(app)
-                .put('/shelly/update')
+                .put('/shelly/')
                 .send({ id:'abc', ip:'', name:'', user:'', internal_id:'x', isActivated:'y' });
 
             expect(res.status).toBe(400);

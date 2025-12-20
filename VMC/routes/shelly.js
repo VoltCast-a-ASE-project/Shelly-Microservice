@@ -24,7 +24,7 @@ const validateShellyAdd = [
 ];
 
 // add a new Shelly
-router.post('/add', validateShellyAdd, (req, res, next) => {
+router.post('/', validateShellyAdd, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -33,7 +33,7 @@ router.post('/add', validateShellyAdd, (req, res, next) => {
 }, ShellyController.addShellyDevice);
 
 // update a Shelly
-router.put('/update', validateShellyUpdate, (req, res, next) => {
+router.put('/', validateShellyUpdate, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
