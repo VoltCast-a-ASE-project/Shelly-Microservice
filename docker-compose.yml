@@ -1,5 +1,5 @@
 services:
-  fronius-ms:
+  shelly-ms:
     build: .
     image: ghcr.io/voltcast-a-ase-project/shelly-microservice/shelly-ms:latest
     networks:
