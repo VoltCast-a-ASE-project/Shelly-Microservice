@@ -53,6 +53,11 @@ To start the Shelly Microservice, the central service .js-file needs to be run. 
 node service.js
 ```
 
+### Run the Service with Mock Dara
+```bash
+MOCK_SHELLY_API=true node service.js
+```
+
 ### Test the Service
 ```bash
 npm test -- --coverage

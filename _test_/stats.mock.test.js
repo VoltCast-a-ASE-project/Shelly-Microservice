@@ -14,8 +14,11 @@ describe('Shelly API Mock', () => {
         expect(state.output).toBe(false);
         expect(state.apower).toBe(0);
         expect(state.current).toBe(0);
-        expect(state.voltage).toBe(230);
-        expect(state.freq).toBe(50);
+
+        expect(state.voltage).toBeGreaterThanOrEqual(220);
+        expect(state.voltage).toBeLessThanOrEqual(240);
+        expect(state.freq).toBeGreaterThanOrEqual(49.8);
+        expect(state.freq).toBeLessThanOrEqual(50.2);
         expect(state.temperature.tC).toBeGreaterThan(0);
     });
 

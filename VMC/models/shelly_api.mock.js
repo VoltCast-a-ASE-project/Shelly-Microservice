@@ -35,18 +35,31 @@ function secureRandomFloat(min, max) {
 */
 async function getSwitchStatus(ip, internalId) {
     const state = getState(`${ip}-${internalId}`);
+    const { output } = state;
 
-    if (state.output) {
-        state.apower = secureRandomFloat(0, 120);
-        state.current = +(state.apower / 230).toFixed(2);
-        state.temperature.tC += secureRandomFloat(0, 0.1);
-        state.aenergy.total += 0.005;
-    } else {
-        state.apower = 0;
-        state.current = 0;
+    const voltage = secureRandomFloat(220, 240);
+    const freq = secureRandomFloat(49.8, 50.2);
+
+    const apower = output ? secureRandomFloat(0, 120) : 0;
+    const current = output ? +(apower / voltage).toFixed(2) : 0;
+    const aenergy = output ? { total: secureRandomFloat(0, 10) } : state.aenergy;
+    const ret_aenergy = output ? { total: secureRandomFloat(0, 1) } : state.ret_aenergy;
+
+    if (output) {
+        state.temperature.tC = secureRandomFloat(20, 60);
     }
+    const temperature = state.temperature;
 
-    return state;
+    return {
+        output,
+        apower,
+        voltage,
+        freq,
+        current,
+        aenergy,
+        ret_aenergy,
+        temperature
+    };
 }
 
 
